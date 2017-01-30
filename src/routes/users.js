@@ -12,11 +12,13 @@ router.route('/')
     .post((req, res) => {
         var user = new User(req.body);
         user.password = hashPassword(user.password);
-        user.save(function (err) {
+        user.save((err) => {
             if (err)
-                res.send(err);
+                res.send(400, err);
 
-            res.json({ message: 'User created!' });
+            user.token = jwt.sign(user, req.app.get('secret'));
+            delete user['password'];
+            res.json(200, user);
         });
     });
 // router.route('/')
@@ -30,22 +32,19 @@ router.route('/')
 
 router.post('/auth', (req, res) => {
     User.findOne({
-        name: req.body.name
+        username: req.body.username
     }, (err, user) => {
         if (err) throw err;
 
         if (!user) {
-            res.json({ success: false, message: 'Authentication failed. User not found.' });
+            res.json(400, {});
         } else if (user) {
-            if (verifyPassword(req.body.password, user.password)) {
-                res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+            if (!verifyPassword(req.body.password, user.get('password'))) {
+                res.json(400, {});
             } else {
-                var token = jwt.sign(user, req.app.get('secret'));
-
-                res.json({
-                    success: true,
-                    token: token
-                });
+                user.token = jwt.sign(user, req.app.get('secret'));
+                delete user['password'];
+                res.json(200, user);
             }
         }
     });
@@ -110,7 +109,6 @@ router.route('/:user_id')
     })
     .put(function (req, res) {
         User.findById(req.params.user_id, function (err, user) {
-
             if (err)
                 res.send(err);
 

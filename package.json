@@ -6,7 +6,7 @@
     "url": ""
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node ./src/server.js"
   },
   "author": "Michal Rozumny",
   "license": "MIT",

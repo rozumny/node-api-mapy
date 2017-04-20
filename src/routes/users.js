@@ -16,9 +16,14 @@ router.route('/')
             if (err)
                 res.send(400, err);
 
-            user.token = jwt.sign(user, req.app.get('secret'));
-            delete user['password'];
-            res.json(200, user);
+            var u = {};
+            u['token'] = jwt.sign(user, req.app.get('secret'));
+            u['username'] = user.get('username');
+            u['email'] = user.get('email');
+            u['sins'] = user.get('sins');
+            u['total'] = user.get('total');
+            u['public'] = user.get('public');
+            res.json(200, u);
         });
     });
 // router.route('/')
@@ -42,9 +47,14 @@ router.post('/auth', (req, res) => {
             if (!verifyPassword(req.body.password, user.get('password'))) {
                 res.json(400, {});
             } else {
-                user.token = jwt.sign(user, req.app.get('secret'));
-                delete user['password'];
-                res.json(200, user);
+                var u = {};
+                u['token'] = jwt.sign(user, req.app.get('secret'));
+                u['username'] = user.get('username');
+                u['email'] = user.get('email');
+                u['sins'] = user.get('sins');
+                u['total'] = user.get('total');
+                u['public'] = user.get('public');
+                res.json(200, u);
             }
         }
     });
@@ -91,47 +101,54 @@ router.post('/resetpassword', (req, res) => {
 router.use('/', authentication);
 
 router.route('/')
-    .get(function (req, res) {
-        User.find(function (err, users) {
-            if (err)
-                res.send(err);
-            res.json(users);
-        });
-    });
-
-router.route('/:user_id')
-    .get(function (req, res) {
-        User.findById(req.params.user_id, function (err, user) {
-            if (err)
-                res.send(err);
-            res.json(user);
-        });
-    })
+    // .get(function (req, res) {
+    //     User.find(function (err, users) {
+    //         if (err)
+    //             res.send(err);
+    //         res.json(users);
+    //     });
+    // })
     .put(function (req, res) {
-        User.findById(req.params.user_id, function (err, user) {
+        User.findOne({
+            email: req.body.email
+        }, (err, user) => {
             if (err)
                 res.send(err);
 
-            user.name = req.body.name;
+            user.set('sins', req.body.sins);
+            user.set('total', req.body.total);
+            user.set('public', req.body.public);
+
             user.save(function (err) {
                 if (err)
-                    res.send(err);
+                    res.send(400, err);
 
-                res.json({ message: 'User updated!' });
+                res.json(200, user);
             });
 
         });
     })
-    .delete(function (req, res) {
-        User.remove({
-            _id: req.params.user_id
-        }, function (err, bear) {
-            if (err)
-                res.send(err);
+// .delete(function (req, res) {
+//     User.remove({
+//         _id: req.params.user_id
+//     }, function (err, bear) {
+//         if (err)
+//             res.send(400, err);
 
-            res.json({ message: 'Successfully deleted' });
-        });
-    });
+//         res.json(200, { message: 'Successfully deleted' });
+//     });
+// })
+
+// router.route('/:email')
+//     .get(function (req, res) {
+//         User.findOne({
+//             email: req.body.email
+//         }, (err, user) => {
+//             if (err)
+//                 res.send(400, err);
+//             res.json(200, user);
+//         });
+//     });
 
 function hashPassword(password) {
     return hash.generate(password);

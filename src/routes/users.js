@@ -8,33 +8,6 @@ var hash = require('password-hash');
 var randomstring = require("randomstring");
 var sendmail = require('sendmail')();
 
-router.route('/')
-    .post((req, res) => {
-        var user = new User(req.body);
-        user.password = hashPassword(user.password);
-        user.save((err) => {
-            if (err)
-                res.send(400, err);
-
-            var u = {};
-            u['token'] = jwt.sign(user, req.app.get('secret'));
-            u['username'] = user.get('username');
-            u['email'] = user.get('email');
-            u['sins'] = user.get('sins');
-            u['total'] = user.get('total');
-            u['public'] = user.get('public');
-            res.json(200, u);
-        });
-    });
-// router.route('/')
-//     .get(function (req, res) {
-//         User.find(function (err, users) {
-//             if (err)
-//                 res.send(err);
-//             res.json(users);
-//         });
-//     });
-
 router.post('/auth', (req, res) => {
     User.findOne({
         username: req.body.username
@@ -51,9 +24,16 @@ router.post('/auth', (req, res) => {
                 u['token'] = jwt.sign(user, req.app.get('secret'));
                 u['username'] = user.get('username');
                 u['email'] = user.get('email');
-                u['sins'] = user.get('sins');
-                u['total'] = user.get('total');
-                u['public'] = user.get('public');
+                u['billingdate'] = user.get('billingdate');
+                u['billingamount'] = user.get('billingamount');
+                u['numberoftracks'] = user.get('numberoftracks');
+                u['numberofpoints'] = user.get('numberofpoints');
+                u['name'] = user.get('name');
+                u['street'] = user.get('street');
+                u['city'] = user.get('city');
+                u['postal'] = user.get('postal');
+                u['ico'] = user.get('ico');
+                u['dic'] = user.get('dic');
                 res.json(200, u);
             }
         }
@@ -80,9 +60,9 @@ router.post('/resetpassword', (req, res) => {
                     res.send(err);
 
                 sendmail({
-                    from: 'no-reply@mysins.cz',
+                    from: 'rozumny@hotmail.com',
                     to: user.email,
-                    subject: 'MySins - password reset',
+                    subject: 'Mapy Manager - password reset',
                     html: 'Your password was reset. Please login using following password: ' + user.password,
                 }, function (err, reply) {
                     console.log(err && err.stack);
@@ -100,14 +80,39 @@ router.post('/resetpassword', (req, res) => {
 // Authenticated only
 router.use('/', authentication);
 
+
 router.route('/')
-    // .get(function (req, res) {
-    //     User.find(function (err, users) {
-    //         if (err)
-    //             res.send(err);
-    //         res.json(users);
-    //     });
-    // })
+    .post((req, res) => {
+        var user = new User(req.body);
+        user.password = hashPassword(user.password);
+        user.save((err) => {
+            if (err)
+                res.send(400, err);
+
+            var u = {};
+            u['token'] = jwt.sign(user, req.app.get('secret'));
+            u['username'] = user.get('username');
+            u['email'] = user.get('email');
+            // u['billingdate'] = user.get('billingdate');
+            // u['billingamount'] = user.get('billingamount');
+            // u['numberoftracks'] = user.get('numberoftracks');
+            // u['numberofpoints'] = user.get('numberofpoints');
+            // u['name'] = user.get('name');
+            // u['street'] = user.get('street');
+            // u['city'] = user.get('city');
+            // u['postal'] = user.get('postal');
+            // u['ico'] = user.get('ico');
+            // u['dic'] = user.get('dic');
+            res.json(200, u);
+        });
+    })
+    .get(function (req, res) {
+        User.find(function (err, users) {
+            if (err)
+                res.send(err);
+            res.json(users);
+        });
+    })
     .put(function (req, res) {
         User.findOne({
             email: req.body.email
@@ -115,9 +120,23 @@ router.route('/')
             if (err)
                 res.send(err);
 
-            user.set('sins', req.body.sins);
-            user.set('total', req.body.total);
-            user.set('public', req.body.public);
+            user.set('username', req.body.username);
+            user.set('email', req.body.email);
+            user.set('billingdate', req.body.billingdate);
+            user.set('billingamount', req.body.billingamount);
+            user.set('numberoftracks', req.body.numberoftracks);
+            user.set('numberofpoints', req.body.numberofpoints);
+            user.set('name', req.body.name);
+            user.set('street', req.body.street);
+            user.set('city', req.body.city);
+            user.set('postal', req.body.postal);
+            user.set('ico', req.body.ico);
+            user.set('dic', req.body.dic);
+
+            var pwd = user.get('password');
+            if (req.body.password != user.get('password')) {
+                user.set('password', hashPassword(req.body.password));
+            }
 
             user.save(function (err) {
                 if (err)
@@ -127,28 +146,19 @@ router.route('/')
             });
 
         });
-    })
-// .delete(function (req, res) {
-//     User.remove({
-//         _id: req.params.user_id
-//     }, function (err, bear) {
-//         if (err)
-//             res.send(400, err);
+    });
 
-//         res.json(200, { message: 'Successfully deleted' });
-//     });
-// })
+router.route('/:user_id')
+    .delete(function (req, res) {
+        User.remove({
+            _id: req.params.user_id
+        }, function (err, bear) {
+            if (err)
+                res.send(400, err);
 
-// router.route('/:email')
-//     .get(function (req, res) {
-//         User.findOne({
-//             email: req.body.email
-//         }, (err, user) => {
-//             if (err)
-//                 res.send(400, err);
-//             res.json(200, user);
-//         });
-//     });
+            res.json(200, { message: 'Successfully deleted' });
+        });
+    });
 
 function hashPassword(password) {
     return hash.generate(password);

@@ -17,8 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 var mongoose = require('mongoose');
-// mongoose.connect('localhost:27017'); // connect to our database
-mongoose.connect('mongodb://kofola:mbKjdQ1feszJ@127.0.0.1:27017/rm2kofola');
+mongoose.connect('localhost:27017'); // connect to our database
+// mongoose.connect('mongodb://kofola:mbKjdQ1feszJ@127.0.0.1:27017/rm2kofola');
 
 router.get('/', (req, res) => {
 	res.json({ message: 'API running!' });

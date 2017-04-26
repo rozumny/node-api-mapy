@@ -23,6 +23,7 @@ router.post('/auth', (req, res) => {
                 var u = {};
                 u['token'] = jwt.sign(user, req.app.get('secret'));
                 u['username'] = user.get('username');
+                u['_id'] = user._id;
                 u['email'] = user.get('email');
                 u['billingdate'] = user.get('billingdate');
                 u['billingamount'] = user.get('billingamount');
@@ -34,6 +35,8 @@ router.post('/auth', (req, res) => {
                 u['postal'] = user.get('postal');
                 u['ico'] = user.get('ico');
                 u['dic'] = user.get('dic');
+                u['contactname'] = user.get('contactname');
+                u['contactphone'] = user.get('contactphone');
                 res.json(200, u);
             }
         }
@@ -93,16 +96,6 @@ router.route('/')
             u['token'] = jwt.sign(user, req.app.get('secret'));
             u['username'] = user.get('username');
             u['email'] = user.get('email');
-            // u['billingdate'] = user.get('billingdate');
-            // u['billingamount'] = user.get('billingamount');
-            // u['numberoftracks'] = user.get('numberoftracks');
-            // u['numberofpoints'] = user.get('numberofpoints');
-            // u['name'] = user.get('name');
-            // u['street'] = user.get('street');
-            // u['city'] = user.get('city');
-            // u['postal'] = user.get('postal');
-            // u['ico'] = user.get('ico');
-            // u['dic'] = user.get('dic');
             res.json(200, u);
         });
     })
@@ -132,9 +125,11 @@ router.route('/')
             user.set('postal', req.body.postal);
             user.set('ico', req.body.ico);
             user.set('dic', req.body.dic);
+            user.set('contactname', req.body.contactname);
+            user.set('contactphone', req.body.contactphone);
 
             var pwd = user.get('password');
-            if (req.body.password != user.get('password')) {
+            if (req.body.password && req.body.password != user.get('password')) {
                 user.set('password', hashPassword(req.body.password));
             }
 

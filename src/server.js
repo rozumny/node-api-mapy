@@ -7,12 +7,14 @@ var merge = require('merge');
 var usersRoute = require('./routes/users');
 var filesRoute = require('./routes/files');
 var authenticationRoute = require('./routes/authentication');
+var path = require('path');
 
 var router = express.Router();
 
 app.set('secret', "423vb46f24vbvbc234cvsgbb542v");
 app.use(morgan('dev')); // log requests to the console
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

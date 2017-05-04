@@ -14,7 +14,7 @@ var router = express.Router();
 app.set('secret', "423vb46f24vbvbc234cvsgbb542v");
 app.use(morgan('dev')); // log requests to the console
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

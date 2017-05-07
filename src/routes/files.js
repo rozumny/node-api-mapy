@@ -100,7 +100,15 @@ router.route('/:file_id')
 
             if (!file) {
                 req.body.name = keyArray[0];
-                file = new File(req.body);
+
+                if (keyArray.length == 1) {
+                    file = new File(req.body);
+                } else {
+                    var collection = {};
+                    collection[keyArray[1]] = req.body.value;
+                    req.body.value = collection;
+                    file = new File(req.body);
+                }
             } else {
                 if (keyArray.length == 1)
                     file.set('value', req.body.value);

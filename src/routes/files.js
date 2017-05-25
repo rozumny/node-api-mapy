@@ -4,29 +4,22 @@ var router = express.Router();
 var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
-// var authentication = require('./authentication');
+var https = require('https');
 
+router.route('/elevation')
+    .get(function (req, r) {
+        https.get('https://maps.googleapis.com/maps/api/elevation/json?locations=' + req.query.locations + '&key=AIzaSyBjxyKwF7enoFYlgiDBH0DFOGOuDC34Y9w',
+            (res) => {
+                var str = "";
+                res.on('data', function (chunk) {
+                    str += chunk;
+                });
 
-// router.route('/')
-//     .post(function (req, res) {
-//         var file = new File(req.body);
-//         file.save(function (err) {
-//             if (err)
-//                 res.send(err);
-
-//             res.json({ message: 'Data created!' });
-//         });
-//     })
-//     .get(function (req, res) {
-//         File.findOne({
-//             name: req.params.name
-//         }, (err, user) => {
-//             if (err)
-//                 res.send(err);
-
-//             res.json(files);
-//         });
-//     });
+                res.on('end', function () {
+                    r.json({ success: true, elevation: JSON.parse(str).results });
+                });
+            });
+    })
 
 router.route('/upload')
     .post(function (req, res) {

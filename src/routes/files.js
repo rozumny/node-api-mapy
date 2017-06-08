@@ -29,12 +29,21 @@ router.route('/upload')
             image.size((err, value) => {
                 if (value.width > 1920 || value.height > 1080) {
                     if (value.width > 1920) {
-                        image.autoOrient().resize(1920);
+                        image
+                            .autoOrient()
+                            .resize(1920)
+                            .write("./public/" + fileName, () => {
+                                res.json({ success: true, name: fileName });
+                            });
                     } else {
-                        image.autoOrient().resize(null, 1080);
+                        image
+                            .autoOrient()
+                            .resize(null, 1080)
+                            .write("./public/" + fileName, () => {
+                                res.json({ success: true, name: fileName });
+                            });
                     }
                 }
-                res.json({ success: true, name: fileName });
             });
         });
 

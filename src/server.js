@@ -15,8 +15,8 @@ app.set('secret', "423vb46f24vbvbc234cvsgbb542v");
 app.use(morgan('dev')); // log requests to the console
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../public')));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 
 var mongoose = require('mongoose');
 mongoose.connect('localhost:27017/tim'); // connect to our database

@@ -5,6 +5,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
 var https = require('https');
+var gm = require('gm');
 
 router.route('/upload')
     .post(function (req, res) {
@@ -23,6 +24,15 @@ router.route('/upload')
         });
 
         form.on('end', function () {
+            gm(filename).size(function (err, value) {
+                if (value.width > 1920 || value.height > 1080) {
+                    if (value.width > 1920) {
+                        gm(filename).autoOrient().resize(1920);
+                    } else {
+                        gm(filename).autoOrient().resize(null, 1080);
+                    }
+                }
+            });
             res.json({ success: true, name: fileName });
         });
 

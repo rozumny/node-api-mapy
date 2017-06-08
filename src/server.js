@@ -20,7 +20,6 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 
 var mongoose = require('mongoose');
 mongoose.connect('localhost:27017/tim'); // connect to our database
-// mongoose.connect('mongodb://kofola:mbKjdQ1feszJ@127.0.0.1:27017/rm2kofola');
 
 router.get('/', (req, res) => {
 	res.json({ message: 'API running!' });

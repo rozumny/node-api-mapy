@@ -6,21 +6,6 @@ var fs = require('fs');
 var path = require('path');
 var https = require('https');
 
-router.route('/elevation')
-    .get(function (req, r) {
-        https.get('https://maps.googleapis.com/maps/api/elevation/json?locations=' + req.query.locations + '&key=AIzaSyBjxyKwF7enoFYlgiDBH0DFOGOuDC34Y9w',
-            (res) => {
-                var str = "";
-                res.on('data', function (chunk) {
-                    str += chunk;
-                });
-
-                res.on('end', function () {
-                    r.json({ success: true, elevation: JSON.parse(str).results });
-                });
-            });
-    })
-
 router.route('/upload')
     .post(function (req, res) {
         var form = new formidable.IncomingForm();

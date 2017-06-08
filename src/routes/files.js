@@ -5,7 +5,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
 var https = require('https');
-var gm = require('gm');
+var gm = require('gm').subClass({ imageMagick: true });
 
 router.route('/upload')
     .post(function (req, res) {
@@ -24,22 +24,23 @@ router.route('/upload')
         });
 
         form.on('end', () => {
+            var filepath = form.uploadDir + "/" + fileName;
             // var file = fs.createReadStream("G:\\Data\\Development\\node-api-mapy\\public\\upload_8f3bc60e31738f775f34075d8feaa38b.jpg");
-            var image = gm("./public/" + fileName);
+            var image = gm(filepath);
             image.size((err, value) => {
                 if (value.width > 1920 || value.height > 1080) {
                     if (value.width > 1920) {
                         image
                             .autoOrient()
                             .resize(1920)
-                            .write("./public/" + fileName, () => {
+                            .write(filepath, () => {
                                 res.json({ success: true, name: fileName });
                             });
                     } else {
                         image
                             .autoOrient()
                             .resize(null, 1080)
-                            .write("./public/" + fileName, () => {
+                            .write(filepath, () => {
                                 res.json({ success: true, name: fileName });
                             });
                     }

@@ -23,17 +23,19 @@ router.route('/upload')
             res.json({ success: false });
         });
 
-        form.on('end', function () {
-            gm(filename).size(function (err, value) {
+        form.on('end', () => {
+            // var file = fs.createReadStream("G:\\Data\\Development\\node-api-mapy\\public\\upload_8f3bc60e31738f775f34075d8feaa38b.jpg");
+            var image = gm("./public/" + fileName);
+            image.size((err, value) => {
                 if (value.width > 1920 || value.height > 1080) {
                     if (value.width > 1920) {
-                        gm(filename).autoOrient().resize(1920);
+                        image.autoOrient().resize(1920);
                     } else {
-                        gm(filename).autoOrient().resize(null, 1080);
+                        image.autoOrient().resize(null, 1080);
                     }
                 }
+                res.json({ success: true, name: fileName });
             });
-            res.json({ success: true, name: fileName });
         });
 
         form.parse(req);

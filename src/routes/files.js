@@ -44,6 +44,8 @@ router.route('/upload')
                                 res.json({ success: true, name: fileName });
                             });
                     }
+                } else {
+                    res.json({ success: true, name: fileName });
                 }
             });
         });

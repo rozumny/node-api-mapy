@@ -26,6 +26,8 @@ router.post('/auth', (req, res) => {
                 u['_id'] = user._id;
                 u['email'] = user.get('email');
                 u['billingdate'] = user.get('billingdate');
+                u['nextbillingdate'] = user.get('nextbillingdate');
+                u['billingperiod'] = user.get('billingperiod');
                 u['billingamount'] = user.get('billingamount');
                 u['numberoftracks'] = user.get('numberoftracks');
                 u['numberofpoints'] = user.get('numberofpoints');
@@ -117,6 +119,8 @@ router.route('/')
             user.set('email', req.body.email);
             user.set('billingdate', req.body.billingdate);
             user.set('billingamount', req.body.billingamount);
+            user.set('nextbillingdate', req.body.nextbillingdate);
+            user.set('billingperiod', req.body.billingperiod);
             user.set('numberoftracks', req.body.numberoftracks);
             user.set('numberofpoints', req.body.numberofpoints);
             user.set('name', req.body.name);

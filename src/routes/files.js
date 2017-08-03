@@ -61,6 +61,33 @@ router.route('/upload/:file_id')
             fs.unlink(p);
         res.json({ success: true });
     });
+router.route('/gettracksbyowner/:owner_id')
+    .get(function (req, res) {
+        var key = req.params.owner_id;
+        File.findOne({
+            name: "tracks"
+        }, function (err, file) {
+            if (err) {
+                res.send(err);
+            } else {
+                if (!file)
+                    res.send({ value: undefined });
+                else {
+                    User.find(function (err, users) {
+                        var user = users.find(user => user.username.toLowerCase() == key.toLowerCase());
+                        if (!user)
+                            res.send({ value: undefined });
+                        else {
+                            var data = file.get("value");
+                            data = data.filter(track => track.userId == user._id);
+                            res.send({ value: data });
+                        }
+                    });
+                }
+            }
+        });
+    });
+
 router.route('/:file_id')
     .get(function (req, res) {
         var key = req.params.file_id;

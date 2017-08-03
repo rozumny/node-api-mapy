@@ -5,6 +5,8 @@ var morgan = require('morgan');
 var cors = require('cors');
 var merge = require('merge');
 var usersRoute = require('./routes/users');
+var tracksRoute = require('./routes/tracks');
+var pointsRoute = require('./routes/points');
 var filesRoute = require('./routes/files');
 var authenticationRoute = require('./routes/authentication');
 var path = require('path');
@@ -26,6 +28,8 @@ router.get('/', (req, res) => {
 });
 app.use('/', router);
 app.use('/api/users', usersRoute)
+app.use('/api/tracks', tracksRoute)
+app.use('/api/points', pointsRoute)
 app.use('/api/files', filesRoute)
 
 var port = process.env.PORT || 8082;

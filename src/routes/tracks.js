@@ -35,6 +35,42 @@ router.route('/gettracksbyowner/:owner_id')
         });
     });
 
+router.route('/get')
+    .get(function (req, res) {
+        var key = req.params.owner_id;
+        File.findOne({
+            name: "tracks"
+        }, function (err, file) {
+            if (err) {
+                res.send(err);
+            } else {
+                if (!file)
+                    res.send({ value: undefined });
+                else {
+                    var data = file.get("value");
+                    data = arrayToObject(objectToArrayStoreKeys(data).map(t => {
+                        var track = [];
+                        var step = t.track.length < 10 ? 1 : 10;
+                        for (i = 0; i < t.track.length; i = i + step) {
+                            track.push(t.track[i]);
+                        }
+
+                        return {
+                            key: t.key,
+                            type: t.type,
+                            longitude: t.longitude,
+                            latitude: t.latitude,
+                            title: t.title,
+                            track: track
+                        }
+                    }));
+                    res.send({ value: data });
+                }
+            }
+        });
+    });
+
+
 function objectToArrayStoreKeys(object) {
     var result = [];
     for (var a in object) {

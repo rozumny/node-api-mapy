@@ -104,8 +104,9 @@ router.route('/:file_id')
                     res.send({ value: undefined });
                 else {
                     var data = file.get("value");
-                    if (keyArray.length == 1)
+                    if (keyArray.length == 1) {
                         res.send({ value: data });
+                    }
                     else {
                         keyArray.splice(0, 1);
                         var result = getNested(data, keyArray.join('.'))

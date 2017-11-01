@@ -27,6 +27,22 @@ router.route('/gettracksbyowner/:owner_id')
                             data = arrayToObject(objectToArrayStoreKeys(data).filter(track => {
                                 return track.userId == user.get('id')
                             }));
+                            data = arrayToObject(objectToArrayStoreKeys(data).map(t => {
+                                var track = [];
+                                var step = t.track.length < 10 ? 1 : 10;
+                                for (i = 0; i < t.track.length; i = i + step) {
+                                    track.push(t.track[i]);
+                                }
+
+                                return {
+                                    key: t.key,
+                                    type: t.type,
+                                    longitude: t.longitude,
+                                    latitude: t.latitude,
+                                    title: t.title,
+                                    track: track
+                                }
+                            }));
                             res.send({ value: data });
                         }
                     });

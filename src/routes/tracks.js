@@ -40,6 +40,7 @@ router.route('/gettracksbyowner/:owner_id')
                                     longitude: t.longitude,
                                     latitude: t.latitude,
                                     title: t.title,
+                                    color: t.color,
                                     track: track
                                 }
                             }));

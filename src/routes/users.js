@@ -34,6 +34,8 @@ router.post('/auth', (req, res) => {
                 u['name'] = user.get('name');
                 u['street'] = user.get('street');
                 u['city'] = user.get('city');
+                u['color'] = user.get('color');
+                u['link'] = user.get('link');
                 u['postal'] = user.get('postal');
                 u['ico'] = user.get('ico');
                 u['dic'] = user.get('dic');
@@ -148,6 +150,8 @@ router.route('/')
             user.set('postal', req.body.postal);
             user.set('ico', req.body.ico);
             user.set('dic', req.body.dic);
+            user.set('link', req.body.link);
+            user.set('color', req.body.color);
             user.set('contactname', req.body.contactname);
             user.set('contactphone', req.body.contactphone);
 

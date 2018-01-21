@@ -82,6 +82,25 @@ router.post('/resetpassword', (req, res) => {
     });
 });
 
+router.get('/link/:id', (req, res) => {
+    User.findOne({
+        link: req.params.id
+    }, function (err, user) {
+        if (err) throw err;
+
+        if (!user) {
+            res.json(400, {});
+        } else {
+            var u = {};
+            u['_id'] = user._id;
+            u['color'] = user.get('color');
+            u['name'] = user.get('name');
+            u['username'] = user.get('username');
+            res.json(200, u);
+        }
+    });
+});
+
 // Authenticated only
 router.use('/', authentication);
 

@@ -73,7 +73,7 @@ router.route('/gettracksbyowner/:owner_id')
                 if (!file)
                     res.send({ value: undefined });
                 else {
-                    User.find(function (err, users) {
+                    Admin.find(function (err, users) {
                         var user = users.find(user => user.username.toLowerCase() == key.toLowerCase());
                         if (!user)
                             res.send({ value: undefined });

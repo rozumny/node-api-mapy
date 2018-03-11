@@ -4,7 +4,7 @@ var router = express.Router();
 var fs = require('fs');
 var path = require('path');
 var https = require('https');
-var User = require('../models/user');
+var Admin = require('../models/admin');
 
 router.route('/gettracksbyowner/:owner_id')
     .get(function (req, res) {
@@ -18,7 +18,7 @@ router.route('/gettracksbyowner/:owner_id')
                 if (!file)
                     res.send({ value: undefined });
                 else {
-                    User.find(function (err, users) {
+                    Admin.find(function (err, users) {
                         var user = users.find(user => user.get('username').toLowerCase() == key.toLowerCase());
                         if (!user)
                             res.send({ value: undefined });

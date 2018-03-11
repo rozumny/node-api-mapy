@@ -1,15 +1,14 @@
 var jwt = require('jsonwebtoken');
-var User = require('../models/user');
+var Admin = require('../models/admin');
 var express = require('express');
 var router = express.Router();
-var User = require('../models/user');
 var authentication = require('./authentication');
 var hash = require('password-hash');
 var randomstring = require("randomstring");
 var sendmail = require('sendmail')();
 
 router.post('/auth', (req, res) => {
-    User.findOne({
+    Admin.findOne({
         username: req.body.username
     }, (err, user) => {
         if (err) throw err;
@@ -48,7 +47,7 @@ router.post('/auth', (req, res) => {
 });
 
 router.post('/resetpassword', (req, res) => {
-    User.findOne({
+    Admin.findOne({
         name: req.body.name
     }, (err, user) => {
         if (err) throw err;
@@ -85,7 +84,7 @@ router.post('/resetpassword', (req, res) => {
 });
 
 router.get('/link/:id', (req, res) => {
-    User.findOne({
+    Admin.findOne({
         link: req.params.id
     }, function (err, user) {
         if (err) throw err;
@@ -109,7 +108,7 @@ router.use('/', authentication);
 
 router.route('/')
     .post((req, res) => {
-        var user = new User(req.body);
+        var user = new Admin(req.body);
         user.password = hashPassword(user.password);
         user.save((err) => {
             if (err)
@@ -123,14 +122,14 @@ router.route('/')
         });
     })
     .get(function (req, res) {
-        User.find(function (err, users) {
+        Admin.find(function (err, users) {
             if (err)
                 res.send(err);
             res.json(users);
         });
     })
     .put(function (req, res) {
-        User.findOne({
+        Admin.findOne({
             email: req.body.email
         }, (err, user) => {
             if (err)
@@ -172,7 +171,7 @@ router.route('/')
 
 router.route('/:user_id')
     .delete(function (req, res) {
-        User.remove({
+        Admin.remove({
             _id: req.params.user_id
         }, function (err, bear) {
             if (err)

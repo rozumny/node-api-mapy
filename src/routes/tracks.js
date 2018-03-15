@@ -28,11 +28,11 @@ router.route('/gettracksbyowner/:owner_id')
                                 return track.userId == user.get('id')
                             }));
                             data = arrayToObject(objectToArrayStoreKeys(data).map(t => {
-                                var track = [];
-                                var step = t.track.length < 10 ? 1 : 10;
-                                for (i = 0; i < t.track.length; i = i + step) {
-                                    track.push(t.track[i]);
-                                }
+                                // var track = [];
+                                // var step = t.track.length < 10 ? 1 : 10;
+                                // for (i = 0; i < t.track.length; i = i + step) {
+                                //     track.push(t.track[i]);
+                                // }
 
                                 return {
                                     key: t.key,
@@ -41,7 +41,7 @@ router.route('/gettracksbyowner/:owner_id')
                                     latitude: t.latitude,
                                     title: t.title,
                                     color: t.color,
-                                    track: track
+                                    track: t.track
                                 }
                             }));
                             res.send({ value: data });

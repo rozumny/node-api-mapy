@@ -19,7 +19,7 @@
     "jsonwebtoken": "^7.2.1",
     "merge": "^1.2.0",
     "mongoose": "~4.6.8",
-    "morgan": "~1.0.0",
+    "morgan": "~1.10.0",
     "password-hash": "^1.2.2",
     "randomstring": "^1.1.5",
     "sendmail": "^1.1.1"

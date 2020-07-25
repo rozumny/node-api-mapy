@@ -21,7 +21,13 @@ app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 
 var mongoose = require('mongoose');
-mongoose.connect('localhost:27017/prezentacevmobilu'); // connect to our database
+mongoose.connect('localhost:27017/prezentacevmobilu',
+{
+	"auth": { "authSource": "admin" },
+    "user": "rozumny",
+    "pass": "tomesere09",
+    "useMongoClient": true
+}); // connect to our database
 
 router.get('/', (req, res) => {
 	res.json({ message: 'API running!' });

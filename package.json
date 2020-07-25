@@ -18,7 +18,7 @@
     "gm": "^1.23.0",
     "jsonwebtoken": "^7.2.1",
     "merge": "^1.2.0",
-    "mongoose": "~4.6.8",
+    "mongoose": "~5.9.25",
     "morgan": "~1.0.0",
     "password-hash": "^1.2.2",
     "randomstring": "^1.1.5",
